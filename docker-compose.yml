@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - MONGO_URL=mongodb://db:27017/iststipuha
+      - SESSION_SECRET=${SESSION_SECRET}
+      - PORT=${PORT}
+      - NODE_ENV=production
+    volumes:
+      - ./public/uploads:/app/public/uploads
+    networks:
+      - stipuha-network
+
+  db:
+    image: mongo:6.0
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - stipuha-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  stipuha-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

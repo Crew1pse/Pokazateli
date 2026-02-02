@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обработка заявок — Админ</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="box">
+        <div class="heading">
+            <div class="navbar">
+                <div class="navbar_logo">
+                    <a href="/"><img src="./media/LOGO3.svg" alt="Logo"></a>
+                    <div class="navbar_logo_way">
+                        <a href="/events" class="navbar_login">Мероприятия</a>
+                        <a href="/table" class="navbar_login">Таблица</a>
+                        {{#if isAdmin}}
+                            <a href="/auth/logout" class="navbar_login">Выйти</a>
+                        {{else}}
+                            <a href="#" class="navbar_login" onclick="openModal()">Войти</a>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin_box">
+            <h2>Обработка заявок</h2>
+            
+            {{#each apps}}
+                <div class="request" data-id="{{this._id}}">
+                    <div class="request-row">
+                        <h2>{{this.fullName}}</h2>
+                        <h2>{{this.direction}}</h2>
+                        <h2>{{this.recordBook}}</h2>
+                        <h2>Документов: {{this.certificates.length}}</h2>
+                        <button class="toggle">▾</button>
+                    </div>
+
+                    <div class="request-details">
+                        <div style="padding: 18px 0 31px 14px;">
+                            <textarea class="container_user_info_input info" placeholder="Комментарий к заявке..." readonly>{{this.comments}}</textarea>
+                            
+                            <div id="status-{{this._id}}" style="font-size: 14px; margin-bottom: 10px; color: #666;"></div>
+
+                            <div class="details-documents">
+                                {{#each this.certificates}}
+                                <div class="details-documents-box">
+                                    <div class="detail-content">
+                                        <p class="detail-content-text">Документ №{{#if @index}}{{add @index 1}}{{else}}1{{/if}}</p>
+                                        <a href="javascript:void(0)" onclick="showDoc('{{this}}', '{{../this._id}}')" class="detail-content-text green">Показать документ</a>
+                                        
+                                        <select name="eventIds" class="event-select">
+                                            <option value="">Выбрать мероприятие</option>
+                                            {{#each @root.events}} 
+                                                <option value="{{this._id}}" data-points="{{this.points}}" data-category="{{this.category}}">
+                                                    {{this.name}}
+                                                </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                                
+                            <div class="details-checkbox">
+                                <div class="details-documents-checkbox">
+                                    <form class="role-form"> 
+                                        <fieldset class="form-checkbox">
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="role" value="proforg">
+                                                <span class="checkmark"></span> Профорг / Староста
+                                            </label>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="role" value="tutor">
+                                                <span class="checkmark"></span> Тьютор
+                                            </label>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="role" value="volunteer">
+                                                <span class="checkmark"></span> Волонтёр
+                                            </label>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="role" value="profburo">
+                                                <span class="checkmark"></span> Член профбюро/студсовета
+                                            </label>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="category-scores" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; font-size: 12px;">
+                                <p>Учеба: <span class="total-study">0</span></p>
+                                <p>Наука: <span class="total-science">0</span></p>
+                                <p>Спорт: <span class="total-sport">0</span></p>
+                                <p>Культура: <span class="total-culture">0</span></p>
+                                <p>Общественная: <span class="total-public">0</span></p>
+                            </div>
+
+                            <div class="details-result">
+                                <div class="details-result-send">
+                                    <p class="detail-content-text">Итого (6-я сумма): <span class="total-display">0</span></p>
+                                    <button class="details-result-btn">Отправить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+
+        <footer class="footer">
+            <div class="footer_logo">
+                <a href="/" style="padding: 35px 0;"><img src="../media/LOGO2.svg" alt="Footer Logo"></a>
+                <div style="display: flex; gap:55px; margin-top: 24px;">
+                    <a href="https://m.vk.com/it_bgitu"><img src="../media/Vk.svg" alt="VK"></a>
+                    <a href="https://t.me/bgituofficial"><img src="../media/TG.svg" alt="TG"></a>
+                </div>
+            </div>
+        </footer>
+
+        <div id="modalOverlay" class="modal-overlay">
+            <div id="myEvent" class="event">
+                <div class="user">
+                    <div id="popup" class="popup">
+                        <div class="user_profile">
+                            <h4 class="zag_user">Авторизация</h4>
+                            <div class="user_profile_input" style="height: 255px;">
+                                <input type="email" class="user_input text" placeholder="Электронная почта">
+                                <input type="password" class="user_input text" placeholder="Пароль">
+                            </div>
+                                <button class="user_save text">Войти</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="docModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            
+            <iframe id="docFrame" src=""></iframe>
+        </div>
+    </div>
+        <div style="width: 80%; height: 90%; background: white; border-radius: 20px; padding: 20px;">
+            <iframe id="docFrame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="./js/index.js" defer></script>
+    <script src="./js/admin.js" defer></script>
+
+</body>
+</html>

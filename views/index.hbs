@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    </head>
+
+
+<body>
+    <div class="box">
+        <div class="heading">
+            <div class="navbar">
+                <div class="navbar_logo">
+                    <a href="/" >
+                        <img src="./media/LOGO.svg" alt="" class="logo1">
+                    </a>
+                    <div class="navbar_logo_way">
+                        <a href="/table" class="navbar_login">Таблица</a>
+                        {{#if isAdmin}}
+                            <a href="/auth/logout" class="navbar_login">Выйти</a>
+                        {{else}}
+                            <a href="#" class="navbar_login" onclick="openModal()">Войти</a>
+                        {{/if}}
+                        <div class="languages">
+                            <div class="dropdown">
+                                <button class="dropbtn"><img src="/media/i (2).webp" alt="" class="dropbtn_img"></button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-google-lang="ru" class="a_text">
+                                    <img src="/media/lang__ru.svg"> RUS
+                                    </a>
+                                    <a href="#" data-google-lang="en" class="a_text">
+                                    <img src="/media/engl.webp" class="language__img"> ENG
+                                    </a>
+                                    <a href="#" data-google-lang="de" class="a_text">
+                                    <img src="/media/germ.webp" class="language__img"> GER
+                                    </a>
+                                    <a href="#" data-google-lang="fr" class="a_text">
+                                    <img src="/media/i.webp" class="language__img"> FRA
+                                    </a>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+                {{!-- Оборачиваем всё в форму для отправки на сервер --}}
+                <form action="/submit-application" method="POST" enctype="multipart/form-data" class="container">
+                    <div class="container_form">
+                        <h2 class="container_input">Заполните информацию о себе</h2>
+                        <div class="container_user">
+                            <div class="container_user_info">
+                                {{!-- Добавили name="fullName", name="direction", name="recordBook" --}}
+                                <input type="text" name="fullName" placeholder="ФИО" class="container_user_info_input" required>
+                                <input type="text" name="direction" placeholder="Группа" class="container_user_info_input" required>
+                                <input type="text" name="recordBook" placeholder="Номер зачетной книжки" class="container_user_info_input" required>
+                            </div>
+                            <textarea name="comments" placeholder="Расскажите о себе" class="container_user_info_input say"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="container_gram">
+                        <h2>Прикрепите ваши грамоты</h2>
+                        <div class="upload-area">
+                            <label class="upload-card">
+                                {{!-- name="certificates" должен совпадать с тем, что ждет multer в index.js --}}
+                                <input type="file" name="certificates" id="fileInput" accept="image/*" hidden multiple>
+                                <span class="plus">+</span>
+                            </label>
+                            <div id="previewList" class="preview-list"></div>
+                        </div>
+                        <div class="upload-area-btn">
+                            {{!-- Тип submit заставит форму отправиться --}}
+                            <button type="submit" class="container_gram_btn">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            
+        <footer class="footer">
+            <div class="footer_logo">
+                <a href="" style="padding: 35px 0;"><img src="/media/LOGO2.svg" alt=""></a>
+                <div style="display: flex; gap:55px; margin-top: 24px;">
+                    <a href="https://m.vk.com/it_bgitu"><img src="/media/Vk.svg" alt=""></a>
+                    <a href="https://t.me/bgituofficial"><img src="/media/TG.svg" alt=""></a>
+                </div>
+            </div>
+        </footer>
+        <div id="modalOverlay" class="modal-overlay">
+            <div id="myEvent" class="event">
+                <div class="user">
+                    <div id="popup" class="popup">
+                        <div class="user_profile ">
+                            <h4 class="zag_user">Авторизация</h4>
+                            <div class="user_profile_input " style="height: 255px;">
+                                <input type="email" class="user_input text" placeholder="Электронная почта">
+                                <input type="password" class="user_input text" placeholder="Пароль">
+                            </div>
+                            <button class="user_save text">Войти</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <script src="./js/index.js" defer></script>
+    <script src="./js/google-translate.js"></script>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+
+
+
+</body>
+</html>

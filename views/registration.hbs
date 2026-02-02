@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/user.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+        <div class="user">
+            {{!-- Добавляем форму. Action указывает на роут регистрации в index.js --}}
+            <form action="/auth/register" method="POST" class="user_profile registration">
+                <h4 class="zag_user">Регистрация</h4>
+                
+                <div class="user_profile_input big">
+                    {{!-- Добавлены атрибуты name для связи с сервером --}}
+                    <input type="text" name="login" class="user_input text" placeholder="Логин" required>
+                    <input type="text" name="username" class="user_input text" placeholder="Имя" required>
+                    <input type="password" name="password" class="user_input text" placeholder="Пароль" required>
+                    <input type="password" name="confirmPassword" class="user_input text" placeholder="Повторите пароль" required>
+                </div>
+
+                <div class="tag_folov">
+                    <h2 class="conentH" style="font-size: 36px;">Любимые тэги:</h2>
+                    <ul class="registration_tags">
+                        {{!-- Для кнопок добавили type="button", чтобы они не отправляли форму раньше времени --}}
+                        <li><button type="button" class="button_box act" data-tag="Спорт">Спорт</button></li>
+                        <li><button type="button" class="button_box act" data-tag="Творчество">Творчество</button></li>
+                        <li><button type="button" class="button_box act" data-tag="Наука">Наука</button></li>
+                        <li><button type="button" class="button_box act" data-tag="Волонтерство">Волонтерство</button></li>
+                    </ul>
+                    {{!-- Скрытое поле, куда JS запишет выбранные теги --}}
+                    <input type="hidden" name="tags" id="selectedTags">
+                </div>
+                
+                {{!-- Кнопка типа submit отправляет всю форму на сервер --}}
+                <button type="submit" class="user_save text">Зарегистрироваться</button>
+            </form>
+        </div>
+     
+    <script src="./js/index.js" defer></script>
+
+</body>
+</html>

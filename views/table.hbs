@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    </head>
+
+
+<body>
+    <div class="box">
+        <div class="heading">
+            <div class="navbar">
+                <div class="navbar_logo">
+                    <a href="/" >
+                        <img src="/media/LOGO.svg" alt="" class="logo1">
+                    </a>
+                    <div class="navbar_logo_way">
+                        <a href="/events" class="navbar_login">Мероприятия</a>
+                        {{#if isAdmin}}
+                            <a href="/admin" class="navbar_login">Обработка заявок</a>
+                            <a href="/auth/logout" class="navbar_login">Выйти</a>
+                        {{else}}
+                            <a href="#" class="navbar_login" onclick="openModal()">Войти</a>
+                        {{/if}}
+                        <div class="languages">
+                            <div class="dropdown">
+                                <button class="dropbtn"><img src="/media/i (2).webp" alt="" class="dropbtn_img"></button>
+                                <div class="dropdown-content">
+                                    <a href="#" data-google-lang="ru" class="a_text">
+                                    <img src="/media/lang__ru.svg"> RUS
+                                    </a>
+                                    <a href="#" data-google-lang="en" class="a_text">
+                                    <img src="/media/engl.webp" class="language__img"> ENG
+                                    </a>
+                                    <a href="#" data-google-lang="de" class="a_text">
+                                    <img src="/media/germ.webp" class="language__img"> GER
+                                    </a>
+                                    <a href="#" data-google-lang="fr" class="a_text">
+                                    <img src="/media/i.webp" class="language__img"> FRA
+                                    </a>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table_box">
+            <h2>Сводная таблица конкурсантов</h2>
+            <div class="table_box_btn" id="filterButtons">
+                <button class="table_box_btn_list active" data-category="all">Все</button>
+                <button class="table_box_btn_list active" data-category="o_score">Общественная</button>
+                <button class="table_box_btn_list active" data-category="k_score">Культурная</button>
+                <button class="table_box_btn_list active" data-category="s_score">Спортивная</button>
+                <button class="table_box_btn_list active" data-category="u_score">Учебная</button>
+                <button class="table_box_btn_list active" data-category="n_score">Научная</button>
+            </div>
+            <div class="table_box_results">
+                <table>
+                    <thead>
+                        <tr>
+                        <th>ФИО</th>
+                        <th>Группа</th>
+                        <th>№ зачётки</th>
+                        <th>Общественная</th>
+                        <th>Культурная</th>
+                        <th>Спортивная</th>
+                        <th>Учебная</th>
+                        <th>Научная</th>
+                        <th>Сумма</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {{#each contestants}}
+                    <tr class="student-row {{#if this.isWinner}}winner-row{{/if}}" 
+                        data-o_score="{{this.o_score}}" 
+                        data-k_score="{{this.k_score}}" 
+                        data-s_score="{{this.s_score}}" 
+                        data-u_score="{{this.u_score}}" 
+                        data-n_score="{{this.n_score}}">
+                        
+                        <td>{{this.studentName}}</td>
+                        <td>{{this.direction}}</td>
+                        <td>{{this.recordBook}}</td>
+                        <td>{{this.o_score}}</td> 
+                        <td>{{this.k_score}}</td>
+                        <td>{{this.s_score}}</td>
+                        <td>{{this.u_score}}</td>
+                        <td>{{this.n_score}}</td>
+                        <td><strong>{{this.totalScore}}</strong></td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="9" style="text-align: center;">Рейтинг пока пуст. Заявки на проверке.</td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="footer_logo">
+                <a href="" style="padding: 35px 0;"><img src="/media/LOGO2.svg" alt=""></a>
+                <div style="display: flex; gap:55px; margin-top: 24px;">
+                    <a href="https://m.vk.com/it_bgitu"><img src="/media/Vk.svg" alt=""></a>
+                    <a href="https://t.me/bgituofficial"><img src="/media/TG.svg" alt=""></a>
+                </div>
+            </div>
+        </footer>
+        <div id="modalOverlay" class="modal-overlay">
+            <div id="myEvent" class="event">
+                <div class="user">
+                    <div id="popup" class="popup">
+                        {{#if isAdmin}}
+                            <div class="user_profile">
+                                <h4 class="zag_user">Вы уже вошли</h4>
+                                <button class="user_save text" onclick="window.location.href='/auth/logout'">Выйти</button>
+                            </div>
+                        {{else}}
+                            <div class="user_profile">
+                                <h4 class="zag_user">Авторизация</h4>
+                                <div class="user_profile_input" style="height: 255px;">
+                                    <input type="email" id="loginEmail" class="user_input text" placeholder="Электронная почта">
+                                    <input type="password" id="loginPassword" class="user_input text" placeholder="Пароль">
+                                </div>
+                                <button class="user_save text" onclick="loginAction()">Войти</button>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="./js/table-filter.js" defer></script>
+
+    <script src="./js/index.js" defer></script>
+    <script src="./js/google-translate.js"></script>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+
+</body>
+</html>
